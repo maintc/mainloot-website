@@ -1,0 +1,77 @@
+---
+import { Image } from "astro:assets";
+import ScrollButton from "./utils/ScrollButton.astro";
+import AnimatedElement from "./utils/AnimatedElement.jsx";
+
+import discordImage from "../img/Hero/discord.png";
+import rocketImage from "../img/Hero/armored-door.png";
+import tcImage from "../img/Hero/cupboard.png";
+
+
+---
+
+<div class="relative h-full">
+  <div class="absolute inset-0 overflow-hidden">
+    <video
+      src="/img/mainloot-montage-website.mp4"
+      autoplay
+      loop
+      muted
+      playsinline
+      class="h-full w-full object-cover object-center"></video>
+  </div>
+  <div class="absolute inset-0 bg-black opacity-70"></div>
+  <AnimatedElement client:visible animationType="slideInRight" duration={0.9}>
+    <div
+      class="relative mx-auto flex max-w-3xl flex-col items-center px-6 py-32 text-center sm:py-48"
+    >
+      <h1
+        class="text-4xl font-bold tracking-tight text-white lg:text-7xl text-shadow"
+      >
+        One <Image
+          src={rocketImage}
+          alt="Mainloot"
+          height={142}
+          width={142}
+          format="webp"
+          loading="eager"
+          class="inline-block"
+        /> to <Image
+          src={tcImage}
+          alt="Mainloot"
+          height={158}
+          width={158}
+          format="webp"
+          loading="eager"
+          class="inline-block"
+        />!!!
+      </h1>
+      <p class="mt-8 text-2xl text-white items-center flex-wrap text-shadow">
+        <span class="block">We're a new rust focused discord channel. We strive to provide a high quality rust experience. Click below to take a tour.</span>
+      </p>
+
+      <a
+        href="https://discord.gg/mainloot"
+        class="mt-16 rounded-md bg-indigo-600 hover:bg-indigo-700 px-12 py-6"
+        ><AnimatedElement client:visible animationType="scaleIn" duration={2}>
+          <Image
+            src={discordImage}
+            alt="Mainloot"
+            height={100}
+            width={225}
+            format="webp"
+            loading="eager"
+            class="inline-block h-10 mx-1"
+          /></AnimatedElement
+        >
+      </a>
+    </div>
+  </AnimatedElement>
+    <ScrollButton targetId="server-card" buttonId="hero" marginTop="mt-0" />
+</div>
+
+<style>
+  .text-shadow {
+    text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.5);
+  }
+</style>

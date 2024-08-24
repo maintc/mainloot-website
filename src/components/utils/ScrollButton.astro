@@ -1,0 +1,78 @@
+---
+// ScrollButton.astro
+export interface Props {
+  targetId?: string;
+  buttonId?: string;
+  marginTop?: string;
+  direction?: 'up' | 'down';
+  animationDelay?: string;
+}
+const { targetId, buttonId, marginTop = "mt-48", direction = 'down', animationDelay = '0s' } = Astro.props;
+
+const arrowPath = direction === 'up'
+  ? "M25 35V15M25 15L35 25M25 15L15 25"
+  : "M25 15V35M25 35L35 25M25 35L15 25";
+
+const ariaLabel = direction === 'up' ? "Scroll to Previous Section" : "Scroll to Next Section";
+---
+
+<div class={`${marginTop} text-white text-center`}>
+  <button
+    id={buttonId}
+    class={`scroll-btn group animation-delay-${animationDelay.replace('.', '-')}`}
+    aria-label={ariaLabel}
+    data-target-id={targetId}
+    data-direction={direction}
+  >
+    <svg
+      width="50"
+      height="50"
+      viewBox="0 0 50 50"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        cx="25"
+        cy="25"
+        r="23"
+        stroke="white"
+        stroke-width="2"
+        class="group-hover:fill-white group-hover:fill-opacity-20 transition-all duration-300"
+      ></circle>
+      <path
+        d={arrowPath}
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="group-hover:stroke-black transition-all duration-300"></path>
+    </svg>
+  </button>
+</div>
+
+<style>
+  .scroll-btn {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    animation: float 3s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+  .scroll-btn:hover {
+    transform: translateY(5px);
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  .animation-delay-0s { animation-delay: 0s; }
+  .animation-delay-0-5s { animation-delay: 0.5s; }
+  .animation-delay-1s { animation-delay: 1s; }
+  .animation-delay-1-5s { animation-delay: 1.5s; }
+  .animation-delay-2s { animation-delay: 2s; }
+  .animation-delay-2-5s { animation-delay: 2.5s; }
+</style>

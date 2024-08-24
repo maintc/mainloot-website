@@ -1,0 +1,78 @@
+---
+import { Icon } from "astro-icon/components";
+import ScrollButton from "./utils/ScrollButton.astro";
+import ImageCarousel from "./utils/ImageCarousel.jsx";
+
+interface Props {
+  serverId: string;
+  reverse?: boolean;
+  nextServerId?: string;
+  prevServerId?: string;
+  animationDelay?: string;
+}
+
+const { serverId, nextServerId, prevServerId } = Astro.props;
+
+import image0 from "../img/Panel/shop.png";
+import image1 from "../img/Panel/reward.png";
+import image2 from "../img/Panel/wipe.png";
+import image3 from "../img/Panel/stats.png";
+import image4 from "../img/Panel/vote.png";
+import image5 from "../img/Panel/kits.png";
+const images = [image0, image1, image2, image3, image4, image5];
+---
+
+<div class="bg-black py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl sm:text-center">
+      <p
+        class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-5xl inline-flex items-center"
+      >
+        <Icon name="mdi:flask" class="m-3 text-red-600" />
+        Our Modded User Experience
+      </p>
+
+      <p class="mt-6 text-lg leading-8 text-gray-300">
+        We use quality plugins and maintain a customized user experience. Redeem
+        rewards, use the shop, vote on maps, redeem kits, and see statistics all
+        from a single UI
+      </p>
+    </div>
+  </div>
+  <div class="relative overflow-hidden pt-16">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <ImageCarousel
+        images={images}
+        animationType="scaleInBottom"
+        duration={0.8}
+        threshold={0.2}
+        client:load
+      />
+    </div>
+  </div>
+
+  <div class="flex justify-center space-x-4">
+    {
+      prevServerId && (
+        <ScrollButton
+          targetId={prevServerId}
+          buttonId={`${serverId}-up`}
+          marginTop="mt-24"
+          direction="up"
+          animationDelay="0s"
+        />
+      )
+    }
+    {
+      nextServerId && (
+        <ScrollButton
+          targetId={nextServerId}
+          buttonId={`${serverId}-down`}
+          marginTop="mt-24"
+          direction="down"
+          animationDelay="2s"
+        />
+      )
+    }
+  </div>
+</div>

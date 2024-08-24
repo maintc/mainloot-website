@@ -1,0 +1,33 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Mainloot",
+  "url": "https://mainloot.com",
+  "description": "We are a brand new discord community of rust players, come join the party. We provide a couple of different rust server experiences for different play styles.",
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body class="bg-black">
+    <slot />
+    <script src="/scripts/ScrollButton.js" is:inline></script>
+    <script src="/scripts/ScrollLink.js" is:inline></script>
+    <script src="/scripts/CopyButton.js" is:inline></script>
+  </body>
+</html>

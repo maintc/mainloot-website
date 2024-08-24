@@ -1,0 +1,54 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import ServerCard from "../components/ServerCard.astro";
+import ServerSection from "../components/ServerSection.astro";
+import ServerPanel from "../components/ServerPanel.astro";
+import Team from "../components/Team.astro";
+---
+
+<Layout title="mainloot - discord.gg/mainloot">
+  <div id="home">
+    <Header />
+    <div class="h-screen w-full">
+      <Hero serverId="hero" nextServerId="server-card"/>
+    </div>
+  </div>
+  <div id="server-card">
+    <div class="h-screen w-full">
+      <ServerCard serverId="server-card" nextServerId="peace" prevServerId="home"/>
+    </div>
+  </div>
+  <div id="peace">
+    <div class="h-screen w-full">
+      <ServerSection serverId="peace" nextServerId="love" prevServerId="server-card"/>
+    </div>
+  </div>
+  <div id="love">
+    <div class="h-screen w-full">
+      <ServerSection serverId="love" nextServerId="war" prevServerId="peace" reverse={true} />
+    </div>
+  </div>
+  <div id="war">
+    <div class="h-screen w-full">
+      <ServerSection serverId="war" nextServerId="vanilla" prevServerId="love" />
+    </div>
+  </div>
+  <div id="vanilla">
+    <div class="h-screen w-full">
+      <ServerSection serverId="vanilla" nextServerId="ServerPanel" prevServerId="war" reverse={true} />
+    </div>
+  </div>
+  <div id="ServerPanel">
+    <div class="h-screen w-full">
+      <ServerPanel serverId="ServerPanel" nextServerId="Team" prevServerId="vanilla" />
+    </div>
+  </div>
+  <div id="Team">
+    <div class="h-screen w-full">
+      <Team serverId="ServerPanel" prevServerId="ServerPanel" />
+    </div>
+  </div>
+  
+</Layout>

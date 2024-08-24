@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+
+// Import the images
+import logoImage from "../img/Header/mainloot.png";
+import discordIcon from "../img/Header/discord.svg";
+import tiktokIcon from "../img/Header/tiktok.png";
+import youtubeIcon from "../img/Header/youtube.png";
+
+import AnimatedElement from './utils/AnimatedElement.jsx';
+---
+
+<header>
+  <nav class="container mx-auto flex items-center justify-between p-6">
+    <div class="flex lg:flex-1">
+      <a href="https://mainloot.com" class="brand-logo">
+        <AnimatedElement client:visible animationType="slideInLeft" duration={1}>
+          <Image
+            src={logoImage}
+            alt="Mainloot"
+            format="webp"
+            loading="eager"
+            class="icon h-12 w-auto"
+          >
+        </AnimatedElement>
+      </a>
+    </div>
+    <div class="lg:flex lg:flex-1 lg:justify-end lg:grid-cols-3 space-x-8">
+      <a href="https://discord.gg/mainloot">
+        <AnimatedElement client:visible animationType="rotateInLeft" duration={1}>
+          <Image
+            src={discordIcon}
+            alt="Discord"
+            format="webp"
+            loading="eager"
+            class="icon h-12 w-auto"
+          />
+      </AnimatedElement>
+      </a>
+      <a href="https://www.tiktok.com/@mainloot?lang=en">
+        <AnimatedElement client:visible animationType="rotateInRight">
+        <Image 
+          src={tiktokIcon}
+          alt="TikTok"
+          format="webp"
+          loading="eager"
+          class="icon h-12 w-auto"
+        />
+      </AnimatedElement>
+      </a>
+      <a href="https://www.youtube.com/@mainlootube"> 
+        <AnimatedElement client:visible animationType="bounceIn" duration={1}>
+        <Image
+          src={youtubeIcon}
+          alt="YouTube"
+          format="webp"
+          loading="eager"
+          class="icon h-12 w-auto"
+        />
+      </AnimatedElement>
+      </a>
+    </div>
+  </nav>
+</header>
+
