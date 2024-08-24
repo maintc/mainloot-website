@@ -1,13 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import { AnimatePresence } from "framer-motion";
-import AnimatedElement from "./AnimatedElement";
+import React, { useState, useEffect, useRef } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import AnimatedElement from './AnimatedElement';
 
-const ImageCarousel = ({
-  images,
-  animationType,
-  duration = 1,
-  threshold = 0.1,
-}) => {
+
+const ImageCarousel = ({ images, animationType, duration = 1, threshold = 0.1 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isInView, setIsInView] = useState(false);
   const carouselRef = useRef(null);
@@ -38,18 +34,13 @@ const ImageCarousel = ({
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000); // Change image every 3 seconds
+    }, 3000); // Change image every 5 seconds
 
     return () => clearInterval(interval);
   }, [isInView, images.length]);
 
   return (
-    <div
-      ref={carouselRef}
-      className={`relative w-full h-full overflow-hidden ${
-        isInView ? "loaded" : "lazy-load"
-      }`}
-    >
+    <div ref={carouselRef} className="relative w-full h-full overflow-hidden">
       <AnimatePresence mode="wait">
         <AnimatedElement
           key={currentIndex}
@@ -60,9 +51,7 @@ const ImageCarousel = ({
           <div>
             <img
               src={images[currentIndex].src}
-              alt={
-                images[currentIndex].alt || `App screenshot ${currentIndex + 1}`
-              }
+              alt={images[currentIndex].alt}
               width={images[currentIndex].width}
               height={images[currentIndex].height}
               className="mb-[-12%] rounded-xl shadow-2xl ring-1 ring-white/10"
