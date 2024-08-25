@@ -90,7 +90,7 @@ const { serverId, nextServerId, prevServerId } = Astro.props;
         ))}
       </div>
     </div>
-    <div class="navigation-buttons">
+    <div class="flex justify-center space-x-4 mt-8 hidden sm:flex">
       {prevServerId && (
         <ScrollButton
           targetId={prevServerId}
