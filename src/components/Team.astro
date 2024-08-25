@@ -19,7 +19,7 @@ import fill from "../img/Team/empty.png"
 
 const { serverId, nextServerId, prevServerId } = Astro.props;
 ---
-<div class="bg-black py-24 sm:py-48">
+<div id={serverId} class="bg-black py-24 sm:py-48">
   <div class="bg-red-100 bg-cover bg-center sm:py-32 bg-custom-bkgd">
     <div class="mx-auto grid max-w-6xl gap-x-20 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
       <div class="max-w-2xl">

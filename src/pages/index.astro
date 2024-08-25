@@ -7,48 +7,103 @@ import ServerSection from "../components/ServerSection.astro";
 import ServerPanel from "../components/ServerPanel.astro";
 import Team from "../components/Team.astro";
 ---
-
 <Layout title="mainloot - discord.gg/mainloot">
-  <div id="home">
+  <div class="site-container">
     <Header />
-    <div class="h-screen w-full">
+    <main class="main-content">
       <Hero serverId="hero" nextServerId="server-card"/>
-    </div>
-  </div>
-  <div id="server-card">
-    <div class="h-screen w-full">
-      <ServerCard serverId="server-card" nextServerId="peace" prevServerId="home"/>
-    </div>
-  </div>
-  <div id="peace">
-    <div class="h-screen w-full">
+      <ServerCard serverId="server-card" nextServerId="peace" prevServerId="hero"/>
       <ServerSection serverId="peace" nextServerId="love" prevServerId="server-card"/>
-    </div>
-  </div>
-  <div id="love">
-    <div class="h-screen w-full">
       <ServerSection serverId="love" nextServerId="war" prevServerId="peace" reverse={true} />
-    </div>
-  </div>
-  <div id="war">
-    <div class="h-screen w-full">
       <ServerSection serverId="war" nextServerId="vanilla" prevServerId="love" />
-    </div>
-  </div>
-  <div id="vanilla">
-    <div class="h-screen w-full">
       <ServerSection serverId="vanilla" nextServerId="ServerPanel" prevServerId="war" reverse={true} />
-    </div>
-  </div>
-  <div id="ServerPanel">
-    <div class="h-screen w-full">
       <ServerPanel serverId="ServerPanel" nextServerId="Team" prevServerId="vanilla" />
-    </div>
+      <Team serverId="Team" prevServerId="ServerPanel" />
+    </main>
   </div>
-  <div id="Team">
-    <div class="h-screen w-full">
-      <Team serverId="ServerPanel" prevServerId="ServerPanel" />
-    </div>
-  </div>
-  
 </Layout>
+
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  .site-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .main-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+  :global(.section-container) {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+  @media (max-width: 640px) {
+    :global(.section-container) {
+      padding: 1rem 0;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const header = document.querySelector('header') as HTMLElement;
+    const mainContent = document.querySelector('.main-content') as HTMLElement;
+    const sections = document.querySelectorAll('.section-container');
+
+    function adjustLayout() {
+      const headerHeight = header?.offsetHeight || 0;
+      const mainHeight = window.innerHeight - headerHeight;
+      mainContent.style.height = `${mainHeight}px`;
+
+      sections.forEach(section => {
+        (section as HTMLElement).style.minHeight = `${mainHeight}px`;
+      });
+    }
+
+    adjustLayout();
+    window.addEventListener('resize', adjustLayout);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          history.replaceState(null, null, `#${entry.target.id}`);
+        }
+      });
+    }, {threshold: 0.5});
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+
+    function smoothScroll(targetId: string) {
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        mainContent.scrollTo({
+          top: targetElement.offsetTop - header.offsetHeight,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    document.querySelectorAll('[id$="-up"], [id$="-down"]').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = (button as HTMLElement).getAttribute('data-target-id');
+        if (targetId) {
+          smoothScroll(targetId);
+        }
+      });
+    });
+  });
+</script>

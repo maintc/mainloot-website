@@ -1,10 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
-
 import { serverSection } from "../data/ServerSection";
 import ScrollButton from "./utils/ScrollButton.astro";
-
 import AnimatedElement from "./utils/AnimatedElement.jsx";
 
 interface Props {
@@ -20,126 +18,128 @@ const server = serverSection.find((s) => s.id === serverId);
 if (!server) {
   throw new Error(`Server with id "${serverId}" not found`);
 }
-const { title, description, imageSrc, features, connectString, icon, color } =
-  server;
+const { title, description, imageSrc, features, connectString, icon, color } = server;
 ---
 
-<div id={serverId} class="bg-black py-32">
-  <div class="mx-auto max-w-7xl px-6 lg:px-8">
-    <div
-      class={`mx-auto flex max-w-2xl flex-col items-end justify-between gap-16 lg:mx-0 lg:max-w-none ${reverse ? "lg:flex-row-reverse" : "lg:flex-row"}`}
-    >
-      <div class="w-full lg:max-w-xl lg:flex-auto"><AnimatedElement client:visible animationType="slideInLeft" duration={2}>
-        <h2
-          class={`text-3xl font-bold tracking-tight text-white sm:text-7xl flex items-center ${reverse ? "justify-end" : ""}`}
-        >
-          {reverse && <span>{title}</span>}
-          <Icon
-            name={icon}
-            style={{ color }}
-            class={`${reverse ? "ml-2" : "mr-2"} inline-block `}
-          />
-          {!reverse && <span>{title}</span>}
-        
-        </h2></AnimatedElement>
+<section id={serverId} class="server-section bg-black py-16 sm:py-32">
+  <div class="section-content mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class={`mx-auto flex flex-col items-end justify-between gap-8 sm:gap-16 lg:mx-0 lg:max-w-none ${reverse ? "lg:flex-row-reverse" : "lg:flex-row"}`}>
+      <div class="w-full lg:max-w-xl lg:flex-auto">
+        <AnimatedElement client:visible animationType="slideInLeft" duration={2}>
+          <h2 class={`text-3xl font-bold tracking-tight text-white sm:text-5xl lg:text-7xl flex items-center ${reverse ? "justify-end" : ""}`}>
+            {reverse && <span>{title}</span>}
+            <Icon name={icon} style={{ color }} class={`${reverse ? "ml-2" : "mr-2"} inline-block `} />
+            {!reverse && <span>{title}</span>}
+          </h2>
+        </AnimatedElement>
         <AnimatedElement client:visible animationType="bounceIn" duration={1}>
-        <p
-          class={`mt-6 text-xl leading-8 text-gray-300 ${reverse ? "text-right" : ""}`}
-        >
-        {description}
-        </p></AnimatedElement>
+          <p class={`mt-4 sm:mt-6 text-lg sm:text-xl leading-8 text-gray-300 ${reverse ? "text-right" : ""}`}>
+            {description}
+          </p>
+        </AnimatedElement>
         <AnimatedElement client:visible animationType="scaleIn" duration={2}>
-        <Image
-          src={imageSrc}
-          alt={`${title} server`}
-          format="webp"
-          loading="lazy"
-          class="mt-8 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]"
-        />
-      </AnimatedElement>
+          <div class="image-container">
+            <Image
+              src={imageSrc}
+              alt={`${title} server`}
+              format="webp"
+              loading="lazy"
+              class="mt-6 sm:mt-8 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]"
+            />
+          </div>
+        </AnimatedElement>
       </div>
       <AnimatedElement client:visible animationType="slideInRight" duration={2}>
-      <div class="w-full lg:max-w-xl lg:flex-auto">
-        <ul>
-          {
-            features.map((feature, _index) => (
-              <li class="py-6">
+        <div class="w-full lg:max-w-xl lg:flex-auto">
+          <ul>
+            {features.map((feature, _index) => (
+              <li class="py-4 sm:py-6" id={serverId}>
                 <dl class="relative flex flex-wrap gap-x-3">
-                  <dd
-                    class={`w-full flex-none text-lg font-semibold tracking-tight text-red-600 flex items-center ${reverse ? "justify-start" : ""}`}
-                  >
+                  <dd class={`w-full flex-none text-lg font-semibold tracking-tight text-red-600 flex items-center ${reverse ? "justify-start" : ""}`}>
                     <span class="flex items-center">
                       <AnimatedElement client:visible animationType="rotateIn" duration={2}>
-                      <Icon
-                        name={feature.icon}
-                        class={`${reverse ? "mr-1" : "mr-1"} text-white text-4xl`}
-                      />
+                        <Icon name={feature.icon} class={`${reverse ? "mr-1" : "mr-1"} text-white text-4xl`} />
                       </AnimatedElement>
                       <span>{feature.title}</span>
                     </span>
                   </dd>
-                  <dd
-                    class={`mt-2 w-full flex-none text-base leading-7 text-gray-600 ${reverse ? "text-left" : ""}`}
-                  >
+                  <dd class={`mt-2 w-full flex-none text-base leading-7 text-gray-600 ${reverse ? "text-left" : ""}`}>
                     {feature.description}
                   </dd>
                 </dl>
               </li>
-            ))
-          }
-        </ul>
-      </AnimatedElement>
-        <div
-          class="inline-code-snippet-container font-mono text-sm inline-flex items-center w-full max-w-md"
-        >
-          <div
-            class="bg-gray-800 text-gray-200 py-2 px-3 rounded-l-md flex-grow overflow-x-auto whitespace-nowrap flex items-center"
-          >
-            <Icon name="mdi:steam" class="mr-2 text-2xl" />
-            <code>{connectString}</code>
+            ))}
+          </ul>
+          <div class="inline-code-snippet-container font-mono text-sm inline-flex items-center w-full max-w-md mt-4">
+            <div class="bg-gray-800 text-gray-200 py-2 px-3 rounded-l-md flex-grow overflow-x-auto whitespace-nowrap flex items-center">
+              <Icon name="mdi:steam" class="mr-2 text-2xl" />
+              <code>{connectString}</code>
+            </div>
+            <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white text-base py-2 px-8 rounded-r-md transition duration-150 ease-in-out flex-shrink-0">
+              Copy
+            </button>
           </div>
-          <button
-            class="copy-button bg-gray-700 hover:bg-gray-600 text-white text-base py-2 px-4 rounded-r-md transition duration-150 ease-in-out flex-shrink-0"
-          >
-            Copy
-          </button>
         </div>
-      </div>
+      </AnimatedElement>
     </div>
   </div>
-  <div class="flex justify-center space-x-4">
-    {
-      prevServerId && (
-        <ScrollButton
-          targetId={prevServerId}
-          buttonId={`${serverId}-up`}
-          marginTop="mt-0"
-          direction="up"
-          animationDelay="0s"
-        />
-      )
-    }
-    {
-      nextServerId && (
-        <ScrollButton
-          targetId={nextServerId}
-          buttonId={`${serverId}-down`}
-          marginTop="mt-0"
-          direction="down"
-          animationDelay="2s"
-        />
-      )
-    }
+  <div class="flex justify-center space-x-4 mt-8">
+    {prevServerId && (
+      <ScrollButton
+        targetId={prevServerId}
+        buttonId={`${serverId}-up`}
+        marginTop="mt-0"
+        direction="up"
+        animationDelay="0s"
+      />
+    )}
+    {nextServerId && (
+      <ScrollButton
+        targetId={nextServerId}
+        buttonId={`${serverId}-down`}
+        marginTop="mt-0"
+        direction="down"
+        animationDelay="2s"
+      />
+    )}
   </div>
-</div>
+</section>
 
 <style>
-  .lazy-load {
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
+  .server-section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-.loaded {
-  opacity: 1;
-}
+  .section-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .image-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .inline-code-snippet-container {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  @media (max-width: 640px) {
+    .server-section {
+      min-height: 100vh;
+      height: auto;
+    }
+
+    .section-content {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
 </style>

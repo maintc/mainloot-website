@@ -1,18 +1,29 @@
 ---
 import { Image } from 'astro:assets';
 
-// Import the images
 import logoImage from "../img/Header/mainloot.png";
 import discordIcon from "../img/Header/discord.svg";
 import tiktokIcon from "../img/Header/tiktok.png";
 import youtubeIcon from "../img/Header/youtube.png";
 
 import AnimatedElement from './utils/AnimatedElement.jsx';
+
+let isOpen = false;
+
+function toggleMenu() {
+  isOpen = !isOpen;
+  const menu = document.getElementById('mobile-menu');
+  if (isOpen) {
+    menu.classList.remove('hidden');
+  } else {
+    menu.classList.add('hidden');
+  }
+}
 ---
 
-<header>
-  <nav class="container mx-auto flex items-center justify-between p-6">
-    <div class="flex lg:flex-1">
+<header class="w-full h-10 sm:h-12">
+  <nav class="container mx-auto flex items-center justify-between p-2 sm:p-3">
+    <div class="flex lg:flex-1 items-center justify-center lg:justify-start">
       <a href="https://mainloot.com" class="brand-logo">
         <AnimatedElement client:visible animationType="slideInLeft" duration={1}>
           <Image
@@ -20,12 +31,19 @@ import AnimatedElement from './utils/AnimatedElement.jsx';
             alt="Mainloot"
             format="webp"
             loading="eager"
-            class="icon h-12 w-auto"
-          >
+            class="h-8 sm:h-10 w-auto"
+          />
         </AnimatedElement>
       </a>
     </div>
-    <div class="lg:flex lg:flex-1 lg:justify-end lg:grid-cols-3 space-x-8">
+    <div class="lg:hidden">
+      <button onClick={toggleMenu} class="text-white focus:outline-none menu-button">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="hidden lg:flex space-x-4 lg:space-x-6">
       <a href="https://discord.gg/mainloot">
         <AnimatedElement client:visible animationType="rotateInLeft" duration={1}>
           <Image
@@ -33,33 +51,140 @@ import AnimatedElement from './utils/AnimatedElement.jsx';
             alt="Discord"
             format="webp"
             loading="eager"
-            class="icon h-12 w-auto"
+            class="h-6 sm:h-8 w-auto"
           />
-      </AnimatedElement>
+        </AnimatedElement>
       </a>
-      <a href="https://www.tiktok.com/@mainloot?lang=en">
-        <AnimatedElement client:visible animationType="rotateInRight">
-        <Image 
-          src={tiktokIcon}
-          alt="TikTok"
-          format="webp"
-          loading="eager"
-          class="icon h-12 w-auto"
-        />
-      </AnimatedElement>
+      <a href="https://www.tiktok.com/@mainloot">
+        <AnimatedElement client:visible animationType="rotateInLeft" duration={1}>
+          <Image
+            src={tiktokIcon}
+            alt="TikTok"
+            format="webp"
+            loading="eager"
+            class="h-6 sm:h-8 w-auto"
+          />
+        </AnimatedElement>
       </a>
-      <a href="https://www.youtube.com/@mainlootube"> 
-        <AnimatedElement client:visible animationType="bounceIn" duration={1}>
-        <Image
-          src={youtubeIcon}
-          alt="YouTube"
-          format="webp"
-          loading="eager"
-          class="icon h-12 w-auto"
-        />
-      </AnimatedElement>
+      <a href="https://www.youtube.com/mainloot">
+        <AnimatedElement client:visible animationType="rotateInLeft" duration={1}>
+          <Image
+            src={youtubeIcon}
+            alt="YouTube"
+            format="webp"
+            loading="eager"
+            class="h-6 sm:h-8 w-auto"
+          />
+        </AnimatedElement>
       </a>
     </div>
   </nav>
+  <div id="mobile-menu" class="hidden lg:hidden flex flex-col space-y-4 bg-white p-4 absolute top-full left-0 w-full shadow-lg z-10">
+    <a href="https://discord.gg/mainloot" class="block text-black">
+      <Image
+        src={discordIcon}
+        alt="Discord"
+        format="webp"
+        loading="eager"
+        class="h-6 sm:h-8 w-auto"
+      />
+    </a>
+    <a href="https://www.tiktok.com/@mainloot" class="block text-black">
+      <Image
+        src={tiktokIcon}
+        alt="TikTok"
+        format="webp"
+        loading="eager"
+        class="h-6 sm:h-8 w-auto"
+      />
+    </a>
+    <a href="https://www.youtube.com/mainloot" class="block text-black">
+      <Image
+        src={youtubeIcon}
+        alt="YouTube"
+        format="webp"
+        loading="eager"
+        class="h-6 sm:h-8 w-auto"
+      />
+    </a>
+  </div>
 </header>
 
+<script client:load>
+  let isOpen = false;
+
+  function toggleMenu() {
+    isOpen = !isOpen;
+    const menu = document.getElementById('mobile-menu');
+    if (isOpen) {
+      menu.classList.remove('hidden');
+    } else {
+      menu.classList.add('hidden');
+    }
+  }
+
+  document.querySelector('button').addEventListener('click', toggleMenu);
+</script>
+
+<style>
+  html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-y: auto;   /* Ensure only one vertical scrollbar */
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  header {
+    height: 3.5rem; /* Reduced height for mobile */
+    position: static; /* Ensure the header is not sticky or fixed */
+  }
+
+  @media (min-width: 640px) {
+    header {
+      height: 5rem; /* Reduced height for larger screens */
+      position: static; /* Ensure the header is not sticky or fixed */
+    }
+  }
+
+  nav {
+    padding: 0.7rem; /* Reduced padding for mobile */
+  }
+
+  @media (min-width: 640px) {
+    nav {
+      padding: 0.75rem; /* Reduced padding for larger screens */
+    }
+  }
+
+  .brand-logo img {
+    height: 2rem; /* Set a fixed height for the logo image */
+  }
+
+  @media (min-width: 640px) {
+    .brand-logo img {
+      height: 3.5rem; /* Set a fixed height for the logo image on larger screens */
+    }
+  }
+
+  .menu-button {
+    height: 1.75rem; /* Reduced menu button height for mobile */
+  }
+
+  @media (min-width: 640px) {
+    .menu-button {
+      height: 1.5rem; /* Reduced menu button height for larger screens */
+    }
+  }
+
+  #mobile-menu {
+    overflow: hidden; /* Prevent additional scrollbars in the mobile menu */
+  }
+</style>

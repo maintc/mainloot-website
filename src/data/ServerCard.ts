@@ -15,7 +15,7 @@ export interface ServerCard {
 export const serverCard: ServerCard[] = [
   {
     title: "PEACE",
-    description: "You live in peace during the week, on Friday evening the PVP switch gets flipped. Will you be a defender or a raider or both?",
+    description: "You will live in peace during the week doing PVE with events and raidable bases, on Friday evening the PVP switch gets flipped",
     imageSrc: peaceImage,
     icon: "mdi:peace",
     color: "purple",
@@ -23,7 +23,7 @@ export const serverCard: ServerCard[] = [
   },
   {
     title: "LOVE",
-    description: "A 2X monthly modded experience with a focus on quality of life without deviating too far from Rust core mechanics",
+    description: "A 2X monthly modded experience with a focus on quality of life without deviating too far from Rust core mechanics.",
     imageSrc: loveImage,
     icon: "mdi:heart",
     color: "red",
@@ -31,7 +31,7 @@ export const serverCard: ServerCard[] = [
   },
   {
     title: "WAR",
-    description: "A one million x battlefield server with a focus on PVP, loot is meaningless here. We offer loadouts and a variety of kits",
+    description: "A one million x battlefield server with a focus on PVP, loot is meaningless here. We offer loadouts and a variety of kits.",
     imageSrc: warImage,
     icon: "mdi:bullets",
     color: "orange",
@@ -39,7 +39,7 @@ export const serverCard: ServerCard[] = [
   },
   {
     title: "VANILLA",
-    description: "The vanilla experience for the purest of rust players. Currently running on a weekly schedule wiping on once a week",
+    description: "The vanilla experience for the purest of rust players. Currently running on a weekly schedule wiping on once a week.",
     imageSrc: vanillaImage,
     icon: "mdi:ice-cream",
     color: "NavajoWhite",
