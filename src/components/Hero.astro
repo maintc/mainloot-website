@@ -7,9 +7,11 @@ import tcImage from "../img/Hero/cupboard.png";
 
 import AnimatedElement from './utils/AnimatedElement.jsx';
 import ScrollButton from './utils/ScrollButton.astro';
+
+const { serverId } = Astro.props;
 ---
 
-<section class="relative flex items-center justify-center min-h-screen">
+<section id={serverId} class="relative flex items-center justify-center min-h-screen">
   <div class="absolute inset-0">
     <video
       src="/img/mainloot-montage-website.mp4"
