@@ -59,8 +59,8 @@ import Team from "../components/Team.astro";
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const header = document.querySelector('header') as HTMLElement;
-    const mainContent = document.querySelector('.main-content') as HTMLElement;
+    const header = document.querySelector('header');
+    const mainContent = document.querySelector('.main-content');
     const sections = document.querySelectorAll('.section-container');
 
     function adjustLayout() {
@@ -69,7 +69,7 @@ import Team from "../components/Team.astro";
       mainContent.style.height = `${mainHeight}px`;
 
       sections.forEach(section => {
-        (section as HTMLElement).style.minHeight = `${mainHeight}px`;
+        section.style.minHeight = `${mainHeight}px`;
       });
     }
 
@@ -82,13 +82,13 @@ import Team from "../components/Team.astro";
           history.replaceState(null, null, `#${entry.target.id}`);
         }
       });
-    }, {threshold: 0.5});
+    }, { threshold: 0.5 });
 
     sections.forEach(section => {
       observer.observe(section);
     });
 
-    function smoothScroll(targetId: string) {
+    function smoothScroll(targetId) {
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
         mainContent.scrollTo({
@@ -101,7 +101,7 @@ import Team from "../components/Team.astro";
     document.querySelectorAll('[id$="-up"], [id$="-down"]').forEach(button => {
       button.addEventListener('click', (e) => {
         e.preventDefault();
-        const targetId = (button as HTMLElement).getAttribute('data-target-id');
+        const targetId = button.getAttribute('data-target-id');
         if (targetId) {
           smoothScroll(targetId);
         }
