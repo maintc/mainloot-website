@@ -13,12 +13,10 @@ import Team from "../components/Team.astro";
       <Header />
       <Hero serverId="hero" nextServerId="server-card"/>
       <ServerCard serverId="server-card" nextServerId="peace" prevServerId="hero"/>
-
       <ServerSection serverId="peace" nextServerId="love" prevServerId="server-card"/>
       <ServerSection serverId="love" nextServerId="war" prevServerId="peace" reverse={true} />
       <ServerSection serverId="war" nextServerId="vanilla" prevServerId="love" />
       <ServerSection serverId="vanilla" nextServerId="ServerPanel" prevServerId="war" reverse={true} />
-
       <ServerPanel serverId="ServerPanel" nextServerId="Team" prevServerId="vanilla" />
       <Team serverId="Team" prevServerId="ServerPanel" />
     </main>
