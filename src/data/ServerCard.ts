@@ -15,7 +15,7 @@ export interface ServerCard {
 export const serverCard: ServerCard[] = [
   {
     title: "PEACE",
-    description: "You will live in peace during the week doing PVE with events and raidable bases, on Friday evening the PVP switch gets flipped",
+    description: "You live in peace during the week with events and raidable bases, on Friday evening the PVP switch gets flipped",
     imageSrc: peaceImage,
     icon: "mdi:peace",
     color: "purple",

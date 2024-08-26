@@ -1,39 +1,53 @@
 ---
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
-import { serverCard } from "../data/ServerCard";
-import ScrollButton from "./utils/ScrollButton.astro";
-import AnimatedElement from "./utils/AnimatedElement.jsx";
 import mainlootImage from "../img/mainloot.png";
-
-interface Props {
-  serverId: string;
-  nextServerId?: string;
-  prevServerId?: string;
-}
+import ScrollButton from "./utils/ScrollButton.astro";
 
 const { serverId, nextServerId, prevServerId } = Astro.props;
+
+let serverData = {};
+
+try {
+  const response = await fetch('http://mainloot.com/api/servers');
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = await response.json();
+  serverData = data;
+  console.log(serverData);
+} catch (error) {
+  console.error('Error fetching server data:', error);
+}
+
+// Define the desired order
+const desiredOrder = ["peace", "love", "war", "vanilla"];
+
+// Custom sorting function
+const sortedServerKeys = Object.keys(serverData).sort((a) => {
+  return desiredOrder.indexOf(a);
+});
 ---
 
 <section class="server-card-section" id={serverId}>
   <div class="content-wrapper">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <AnimatedElement client:visible animationType="scaleInTop" duration={1.2}>
-        <Image
-          src={mainlootImage}
-          alt="mainloot"
-          class="w-full object-cover main-image"
-          loading="lazy"
-        />
-      </AnimatedElement>
+      <Image
+        src={mainlootImage}
+        alt="mainloot"
+        class="w-full object-cover main-image"
+        loading="lazy"
+      />
       <div class="server-card-grid">
-        {serverCard.map((card) => (
-          <AnimatedElement client:visible animationType="scaleInBottom" duration={1.2}>
+        {sortedServerKeys.map((serverId) => {
+          const serverInfo = serverData[serverId]; // Access the relevant server data using the server ID
+        
+          return (
             <article class="server-card">
               <div class="image-container">
                 <Image
-                  src={card.imageSrc}
-                  alt={`${card.title} server`}
+                  src={serverInfo.cardInfo.imageSrc}
+                  alt={`${serverInfo.cardInfo.title} server`}
                   format="webp"
                   loading="lazy"
                   class="card-image"
@@ -43,30 +57,30 @@ const { serverId, nextServerId, prevServerId } = Astro.props;
               <div class="card-content">
                 <h3 class="card-title">
                   <Icon
-                    name={card.icon}
+                    name={serverInfo.cardInfo.icon}
                     class="card-icon"
-                    style={`color: ${card.color};`}
+                    style={`color: ${serverInfo.cardInfo.color};`}
                   />
                   <a
-                    href={`#${card.title.toLowerCase()}`}
+                    href={`#${serverInfo.cardInfo.title.toLowerCase()}`}
                     class="title-link"
-                    data-target-id={card.title.toLowerCase()}
+                    data-target-id={serverInfo.cardInfo.title.toLowerCase()}
                   >
-                    {card.title}
+                    {serverInfo.cardInfo.title}
                   </a>
                 </h3>
-                <p class="card-description">{card.description}</p>
+                <p class="card-description">{serverInfo.cardInfo.description}</p>
                 <p class="card-info">
                   <Icon
                     name="mdi:calendar-sync"
                     class="info-icon"
-                    style={`color: ${card.color};`}
+                    style={`color: ${serverInfo.cardInfo.color};`}
                   />
-                  <span>{card.scheduledWipe}</span>
+                  <span>{serverInfo.wipeInfo.schedule_type || 'N/A'}</span>
                 </p>
                 <p class="card-info">
-                  <Icon name="mdi:calendar-arrow-left" class="info-icon" />
-                  <span><span class="text-white">Last Wipe:</span> 02/02/2024</span>
+                  <Icon name="mdi:calendar-arrow-left" class="info-icon text-gray-600" />
+                  <span class="text-gray-400"><span class="text-white"></span> {serverInfo.wipeInfo.status || 'N/A'}</span>
                 </p>
                 <p class="card-info">
                   <Icon
@@ -74,7 +88,7 @@ const { serverId, nextServerId, prevServerId } = Astro.props;
                     class="info-icon"
                     style="color: LightGreen;"
                   />
-                  <span><span class="text-white">Next Wipe:</span> 03/03/2024</span>
+                  <span><span class="text-white"></span> {serverInfo.wipeInfo.countdown || 'N/A'}</span>
                 </p>
                 <p class="card-info">
                   <Icon
@@ -82,12 +96,12 @@ const { serverId, nextServerId, prevServerId } = Astro.props;
                     class="info-icon"
                     style="color: white;"
                   />
-                  <span>Players: 17/100</span>
+                  <span> {serverInfo.population} / 100 </span>
                 </p>
               </div>
             </article>
-          </AnimatedElement>
-        ))}
+          );
+        })}
       </div>
     </div>
     <div class="flex justify-center space-x-4 mt-8 hidden sm:flex">
