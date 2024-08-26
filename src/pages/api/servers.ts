@@ -1,5 +1,6 @@
 // File: src/pages/api/server-data.ts
-import { serverCard, type ServerCard } from '../../data/ServerCard';
+import { serverCard, type ServerCard } from "../../data/ServerCard";
+import type { APIContext } from 'astro';
 
 interface PopulationData {
   [key: string]: number;
@@ -32,15 +33,15 @@ interface CombinedServerData {
 }
 
 function normalizeServerName(name: string): string {
-  return name.toLowerCase().replace('us-', '');
+  return name.toLowerCase().replace("us-", "");
 }
 
-export async function GET() {
+export async function GET(context: APIContext) {
   try {
     // Fetch data from both APIs
     const [popResponse, wipeResponse] = await Promise.all([
-      fetch('https://api.mainloot.com/pop'),
-      fetch('https://api.mainloot.com/wipe')
+      fetch("https://api.mainloot.com/pop"),
+      fetch("https://api.mainloot.com/wipe"),
     ]);
 
     const popData: PopulationData = await popResponse.json();
@@ -48,15 +49,15 @@ export async function GET() {
 
     // Create a map of normalized server names to ServerCard data
     const serverCardMap = new Map(
-      serverCard.map(card => [normalizeServerName(card.title), card])
+      serverCard.map((card) => [normalizeServerName(card.title), card])
     );
 
     // Combine the data
     const combinedData: CombinedServerData = {};
 
     for (const [server, population] of Object.entries(popData)) {
-      if (server !== 'last_updated') {
-        const serverKey = server === 'us-4x' ? 'us-love' : server;
+      if (server !== "last_updated") {
+        const serverKey = server === "us-4x" ? "us-love" : server;
         const normalizedKey = normalizeServerName(serverKey);
         const cardInfo = serverCardMap.get(normalizedKey);
 
@@ -64,7 +65,7 @@ export async function GET() {
           combinedData[serverKey] = {
             population,
             wipeInfo: wipeData.servers[server] || null,
-            cardInfo
+            cardInfo,
           };
         }
       }
@@ -72,7 +73,7 @@ export async function GET() {
 
     // Add any servers from wipeData that aren't in popData
     for (const server of Object.keys(wipeData.servers)) {
-      const serverKey = server === 'us-4x' ? 'us-love' : server;
+      const serverKey = server === "us-4x" ? "us-love" : server;
       const normalizedKey = normalizeServerName(serverKey);
       const cardInfo = serverCardMap.get(normalizedKey);
 
@@ -80,7 +81,7 @@ export async function GET() {
         combinedData[serverKey] = {
           population: 0,
           wipeInfo: wipeData.servers[server],
-          cardInfo
+          cardInfo,
         };
       }
     }
@@ -88,16 +89,19 @@ export async function GET() {
     return new Response(JSON.stringify(combinedData), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     });
   } catch (error) {
-    console.error('Error fetching or processing data:', error);
-    return new Response(JSON.stringify({ error: 'Failed to fetch server data' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json'
+    console.error("Error fetching or processing data:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to fetch server data" }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
   }
 }

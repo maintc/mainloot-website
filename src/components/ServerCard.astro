@@ -9,13 +9,12 @@ const { serverId, nextServerId, prevServerId } = Astro.props;
 let serverData = {};
 
 try {
-  const response = await fetch('http://mainloot.com/api/servers');
+  const origin = new URL(Astro.request.url).origin;
+  const response = await fetch(`${origin}/api/servers`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-  const data = await response.json();
-  serverData = data;
-  console.log(serverData);
+  serverData = await response.json();
 } catch (error) {
   console.error('Error fetching server data:', error);
 }
