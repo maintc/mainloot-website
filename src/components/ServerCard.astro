@@ -8,17 +8,23 @@ const { serverId, nextServerId, prevServerId } = Astro.props;
 
 let serverData = {};
 
-try {
+
+if (import.meta.env.SSR) {
+  // Server-side rendering
   const origin = new URL(Astro.request.url).origin;
   const response = await fetch(`${origin}/api/servers`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   serverData = await response.json();
-} catch (error) {
-  console.error('Error fetching server data:', error);
+} else {
+  // Client-side rendering
+  const response = await fetch('/api/servers');
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  serverData = await response.json();
 }
-
 // Define the desired order
 const desiredOrder = ["peace", "love", "war", "vanilla"];
 
