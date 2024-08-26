@@ -3,30 +3,16 @@ import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import mainlootImage from "../img/mainloot.png";
 import ScrollButton from "./utils/ScrollButton.astro";
+import { serverCard } from "../data/ServerCard";
 
 const { serverId, nextServerId, prevServerId } = Astro.props;
 
-let serverData = {};
-
-// Server-side rendering
-const origin = new URL(Astro.request.url).origin;
-const response = await fetch(`${origin}/api/servers`);
-if (!response.ok) {
-  throw new Error(`HTTP error! status: ${response.status}`);
-}
-serverData = await response.json();
-
 // Define the desired order
-const desiredOrder = ["peace", "love", "war", "vanilla"];
-
-// Custom sorting function
-const sortedServerKeys = Object.keys(serverData).sort((a) => {
-  return desiredOrder.indexOf(a);
-});
+const desiredOrder = ["us-peace", "us-love", "us-war", "us-vanilla"];
 ---
 
 <section class="server-card-section" id={serverId}>
-  <div class="content-wrapper">
+  <div class="content-wrapper" id={serverId}>
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <Image
         src={mainlootImage}
@@ -34,70 +20,65 @@ const sortedServerKeys = Object.keys(serverData).sort((a) => {
         class="w-full object-cover main-image"
         loading="lazy"
       />
-      <div class="server-card-grid">
-        {sortedServerKeys.map((serverId) => {
-          const serverInfo = serverData[serverId]; // Access the relevant server data using the server ID
-        
-          return (
-            <article class="server-card">
-              <div class="image-container">
-                <Image
-                  src={serverInfo.cardInfo.imageSrc}
-                  alt={`${serverInfo.cardInfo.title} server`}
-                  format="webp"
-                  loading="lazy"
-                  class="card-image"
+      <div id="server-card-grid" class="server-card-grid">
+        {serverCard.map((card) => (
+          <article class="server-card" data-server-id={`us-${card.title.toLowerCase()}`} style="display: none;">
+            <div class="image-container">
+              <Image
+                src={card.imageSrc}
+                alt={`${card.title} server`}
+                class="card-image"
+                loading="lazy"
+              />
+              <div class="image-overlay"></div>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">
+                <Icon
+                  name={card.icon}
+                  class="card-icon"
+                  style={`color: ${card.color};`}
                 />
-                <div class="image-overlay"></div>
-              </div>
-              <div class="card-content">
-                <h3 class="card-title">
-                  <Icon
-                    name={serverInfo.cardInfo.icon}
-                    class="card-icon"
-                    style={`color: ${serverInfo.cardInfo.color};`}
-                  />
-                  <a
-                    href={`#${serverInfo.cardInfo.title.toLowerCase()}`}
-                    class="title-link"
-                    data-target-id={serverInfo.cardInfo.title.toLowerCase()}
-                  >
-                    {serverInfo.cardInfo.title}
-                  </a>
-                </h3>
-                <p class="card-description">{serverInfo.cardInfo.description}</p>
-                <p class="card-info">
-                  <Icon
-                    name="mdi:calendar-sync"
-                    class="info-icon"
-                    style={`color: ${serverInfo.cardInfo.color};`}
-                  />
-                  <span>{serverInfo.wipeInfo.schedule_type || 'N/A'}</span>
-                </p>
-                <p class="card-info">
-                  <Icon name="mdi:calendar-arrow-left" class="info-icon text-gray-600" />
-                  <span class="text-gray-400"><span class="text-white"></span> {serverInfo.wipeInfo.status || 'N/A'}</span>
-                </p>
-                <p class="card-info">
-                  <Icon
-                    name="mdi:calendar-star-outline"
-                    class="info-icon"
-                    style="color: LightGreen;"
-                  />
-                  <span><span class="text-white"></span> {serverInfo.wipeInfo.countdown || 'N/A'}</span>
-                </p>
-                <p class="card-info">
-                  <Icon
-                    name="mdi:account-group"
-                    class="info-icon"
-                    style="color: white;"
-                  />
-                  <span> {serverInfo.population} / 100 </span>
-                </p>
-              </div>
-            </article>
-          );
-        })}
+                <a
+                  href={`#${card.title.toLowerCase()}`}
+                  class="title-link"
+                  data-target-id={card.title.toLowerCase()}
+                >
+                  {card.title}
+                </a>
+              </h3>
+              <p class="card-description">{card.description}</p>
+              <p class="card-info">
+                <Icon
+                  name="mdi:calendar-sync"
+                  class="info-icon"
+                  style={`color: ${card.color};`}
+                />
+                <span data-info="schedule_type">N/A</span>
+              </p>
+              <p class="card-info">
+                <Icon name="mdi:calendar-arrow-left" class="info-icon text-gray-600" />
+                <span class="text-gray-400"><span class="text-white" data-info="status">N/A</span></span>
+              </p>
+              <p class="card-info">
+                <Icon
+                  name="mdi:calendar-star-outline"
+                  class="info-icon"
+                  style="color: LightGreen;"
+                />
+                <span data-info="countdown">N/A</span>
+              </p>
+              <p class="card-info">
+                <Icon
+                  name="mdi:account-group"
+                  class="info-icon"
+                  style="color: white;"
+                />
+                <span data-info="population">0</span> / 100
+              </p>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
     <div class="flex justify-center space-x-4 mt-8 hidden sm:flex">
@@ -123,6 +104,60 @@ const sortedServerKeys = Object.keys(serverData).sort((a) => {
   </div>
 </section>
 
+<script>
+  const desiredOrder = ["us-peace", "us-love", "us-war", "us-vanilla"];
+
+  async function fetchServerData() {
+    try {
+      const response = await fetch("/api/servers");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const serverData = await response.json();
+      return serverData;
+    } catch (error) {
+      console.error("Failed to fetch server data:", error);
+      return {};
+    }
+  }
+
+  function updateServerCard(serverId, serverInfo) {
+    const card = document.querySelector(`[data-server-id="${serverId}"]`);
+    if (card) {
+      card.querySelector('[data-info="schedule_type"]').textContent = serverInfo.wipeInfo?.schedule_type || 'N/A';
+      card.querySelector('[data-info="status"]').textContent = serverInfo.wipeInfo?.status || 'N/A';
+      card.querySelector('[data-info="countdown"]').textContent = serverInfo.wipeInfo?.countdown || 'N/A';
+      card.querySelector('[data-info="population"]').textContent = serverInfo.population;
+    }
+  }
+
+  async function renderServerCards() {
+    const serverData = await fetchServerData();
+    const serverCardGrid = document.getElementById('server-card-grid');
+    
+    if (serverCardGrid) {
+      const sortedServerKeys = Object.keys(serverData).sort((a, b) => {
+        return desiredOrder.indexOf(a) - desiredOrder.indexOf(b);
+      });
+
+      sortedServerKeys.forEach((serverId) => {
+        const serverInfo = serverData[serverId];
+        updateServerCard(serverId, serverInfo);
+      });
+
+      // Reorder the cards based on the desired order
+      desiredOrder.forEach((serverId) => {
+        const card = serverCardGrid.querySelector(`[data-server-id="${serverId}"]`);
+        if (card) {
+          serverCardGrid.appendChild(card);
+        }
+      });
+    }
+  }
+
+  // Call the function when the DOM is loaded
+  document.addEventListener('DOMContentLoaded', renderServerCards);
+</script>
 <style>
   .server-card-section {
     min-height: 100vh;
