@@ -1,6 +1,5 @@
 // File: src/pages/api/server-data.ts
 import { serverCard, type ServerCard } from "../../data/ServerCard";
-import type { APIContext } from 'astro';
 
 interface PopulationData {
   [key: string]: number;
@@ -36,7 +35,7 @@ function normalizeServerName(name: string): string {
   return name.toLowerCase().replace("us-", "");
 }
 
-export async function GET(context: APIContext) {
+export async function GET() {
   try {
     // Fetch data from both APIs
     const [popResponse, wipeResponse] = await Promise.all([
