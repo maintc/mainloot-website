@@ -22,7 +22,7 @@ const desiredOrder = ["us-peace", "us-love", "us-war", "us-vanilla"];
       />
       <div id="server-card-grid" class="server-card-grid">
         {serverCard.map((card) => (
-          <article class="server-card" data-server-id={`us-${card.title.toLowerCase()}`} style="display: none;">
+          <article class="server-card" data-server-id={`us-${card.title.toLowerCase()}`}>
             <div class="image-container">
               <Image
                 src={card.imageSrc}
