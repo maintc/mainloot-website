@@ -48,7 +48,7 @@ export const serverSection: ServerSection[] = [
         description: "We try our best to offer a unique and integrated experience. We have a rewards system, a shop, stats, and kits.",
       },
     ],
-    connectString: "connect peace.mainloot.com",
+    connectString: "connect us-peace.mainloot.com",
   },
   {
     id: "love",
@@ -79,7 +79,7 @@ export const serverSection: ServerSection[] = [
         description: "We have a rewards system, a shop, stats, and kits. We also offer the ability to sell items in the shop and earn rewards from discord activity.",
       },
     ],
-    connectString: "connect love.mainloot.com",
+    connectString: "connect us-love.mainloot.com",
   },
   {
     id: "war",
@@ -110,7 +110,7 @@ export const serverSection: ServerSection[] = [
         description: "We provide a bunch of different kits with short cooldowns along with shop and stats.",
       },
     ],
-    connectString: "connect war.mainloot.com",
+    connectString: "connect us-war.mainloot.com",
   },
   {
     id: "vanilla",
@@ -141,6 +141,6 @@ export const serverSection: ServerSection[] = [
         description: "We run out of the Chicago region on Tempest Hosting. We utilize a 10GBPS uplink and run on AMD 7950 CPU's.",
       },
     ],
-    connectString: "connect vanilla.mainloot.com",
+    connectString: "connect us-vanilla.mainloot.com",
   },
 ];
