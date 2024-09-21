@@ -1,4 +1,5 @@
-// File: src/pages/api/server-data.ts
+// File: src/pages/api/servers.ts
+import type { APIRoute } from 'astro';
 import { serverCard, type ServerCard } from "../../data/ServerCard";
 
 interface PopulationData {
@@ -35,7 +36,7 @@ function normalizeServerName(name: string): string {
   return name.toLowerCase().replace("us-", "");
 }
 
-export async function GET() {
+export const GET: APIRoute = async ({ request }) => {
   try {
     // Fetch data from both APIs
     const [popResponse, wipeResponse] = await Promise.all([
@@ -56,13 +57,12 @@ export async function GET() {
 
     for (const [server, population] of Object.entries(popData)) {
       if (server !== "last_updated") {
-        const serverKey = server === "us-4x" ? "us-love" : server;
-        const normalizedKey = normalizeServerName(serverKey);
+        const normalizedKey = normalizeServerName(server);
         const cardInfo = serverCardMap.get(normalizedKey);
-
+        
         if (cardInfo) {
-          combinedData[serverKey] = {
-            population,
+          combinedData[`us-${normalizedKey}`] = {
+            population: typeof population === 'number' ? population : parseInt(String(population), 10) || 0,
             wipeInfo: wipeData.servers[server] || null,
             cardInfo,
           };
@@ -72,12 +72,10 @@ export async function GET() {
 
     // Add any servers from wipeData that aren't in popData
     for (const server of Object.keys(wipeData.servers)) {
-      const serverKey = server === "us-4x" ? "us-love" : server;
-      const normalizedKey = normalizeServerName(serverKey);
+      const normalizedKey = normalizeServerName(server);
       const cardInfo = serverCardMap.get(normalizedKey);
-
-      if (!combinedData[serverKey] && cardInfo) {
-        combinedData[serverKey] = {
+      if (!combinedData[`us-${normalizedKey}`] && cardInfo) {
+        combinedData[`us-${normalizedKey}`] = {
           population: 0,
           wipeInfo: wipeData.servers[server],
           cardInfo,
@@ -93,14 +91,11 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Error fetching or processing data:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to fetch server data" }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Failed to fetch server data" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
-}
+};
