@@ -15,6 +15,7 @@ import logoImage from "../img/mainloot.png";
 import alberto from "../img/Team/alberto.png"
 import decay from "../img/Team/decay.png"
 import sleepy from "../img/Team/sleepy.png"
+import greantea from "../img/Team/greentea.png"
 import fill from "../img/Team/empty.png"
 
 const { serverId, nextServerId, prevServerId } = Astro.props;
@@ -97,16 +98,16 @@ const { serverId, nextServerId, prevServerId } = Astro.props;
           <AnimatedElement client:visible animationType="slideInRight" duration={1}>
             <div class="flex items-center gap-x-6">
               <Image
-                src={fill}
+                src={greentea}
                 alt="Mainloot"
                 format="webp"
                 loading="lazy"
-                class="h-24 w-24 rounded-full "
+                class=class="h-24 w-24 rounded-full border-4 border-red-600"
               />
               <div>
-                <h3 class="text-xl font-semibold leading-7 tracking-tight text-gray-400">Your Name Here</h3>
-                <p class="text-sm font-bold leading-6 text-red-600">Contributor</p>
-                <p class="text-sm font-mono leading-6 text-white">A short cheeky bio that isn't long enough to be helpful at all</p>
+                <h3 class="text-xl font-semibold leading-7 tracking-tight text-gray-400">Green Tea</h3>
+                <p class="text-sm font-bold leading-6 text-red-600">Staff</p>
+                <p class="text-sm font-mono leading-6 text-white">Our international liason and builder, Slava Ukraini</p>
               </div>
             </div>
           </AnimatedElement>
